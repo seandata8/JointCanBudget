@@ -484,7 +484,7 @@ public class FXHelper {
         
         // sort the transactions
         // example: anagrams.sort(Comparator.comparing(Word::getPoints));
-        transactions.sort(Comparator.comparing(Transaction::getDateString));
+        transactions.sort(Comparator.comparing(Transaction::getBudgetDateString));
         
         for (Transaction trans : transactions) {
             vboxTransactions.getChildren().add(trans.getHBox(choices));

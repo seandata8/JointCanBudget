@@ -142,14 +142,15 @@ public class Transaction {
     }
     */
 
-    Transaction(String ds, Float amt, String dsc, String catname) {
+    Transaction(String ds, Float amt, String dsc, String catname, String bds) {
         
         // create transaction from database
         isInDB = true;
         dateString = ds;
-        budgetDateString = ds;
+        budgetDateString = bds;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-        date = LocalDate.parse(ds, formatter);
+        // the internal date of the Transaction object is the budget date (not the transaction date)
+        date = LocalDate.parse(bds, formatter);
         amount = amt;
         desc = dsc;
         for (Category c : categories) {

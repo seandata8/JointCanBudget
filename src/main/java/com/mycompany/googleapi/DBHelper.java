@@ -244,18 +244,19 @@ public class DBHelper {
         try {
             conn = DriverManager.getConnection(dbURL);
             stmt = conn.createStatement();
-            sql = "select * from trans where STRFTIME('%m-%Y', date) = '" + 
+            sql = "select * from trans where STRFTIME('%m-%Y', budget_date) = '" + 
                     monthToNum(month) + "-" + year + "'";
             ress = stmt.executeQuery(sql);
             while (ress.next()) {
                 String ds = ress.getString("date");
+                String bds = ress.getString("budget_date");
                 Float amt = ress.getFloat("amount");
                 String dsc = ress.getString("desc");
                 String cat = ress.getString("category");
                 Long id = ress.getLong("id");
-                Transaction tr = new Transaction(ds, amt, dsc, cat);
+                Transaction tr = new Transaction(ds, amt, dsc, cat, bds);
                 trans.add(tr);
-                System.out.println(ds + "---" + amt.toString() + "---" + ress.getString("desc"));
+                System.out.println(bds + "---" + amt.toString() + "---" + ress.getString("desc"));
             }
             stmt.close();
             conn.close();
