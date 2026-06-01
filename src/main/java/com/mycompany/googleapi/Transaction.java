@@ -33,9 +33,10 @@ import org.apache.commons.csv.CSVRecord;
  */
 public class Transaction {
     
-    String desc;        // description
-    Float amount;       // amount of transaction
-    LocalDate date;     // date of transaction
+    String desc;            // description
+    Float amount;           // amount of transaction
+    LocalDate date;         // date of transaction
+    LocalDate budgetDate;   // date to be added to the budget
     String dateString;
     Category category = null;
     ComboBox catCB;
@@ -230,6 +231,14 @@ public class Transaction {
         String sp = "";
         DatePicker dateDP = new DatePicker(date);
         dateDP.setMaxWidth(120);
+        // change background to pink if the value is changed
+        dateDP.valueProperty().addListener(new ChangeListener<LocalDate>() {
+            @Override
+            public void changed(ObservableValue<? extends LocalDate> ov, LocalDate t, LocalDate t1) {
+                dateDP.setStyle("-fx-control-inner-background: mistyrose;");
+            }
+        });
+        
         //Button dateB = new Button(String.format("%s", date));
         Button amountB = new Button(String.format("$%8.2f", amount));
         amountB.setMinWidth(100);
