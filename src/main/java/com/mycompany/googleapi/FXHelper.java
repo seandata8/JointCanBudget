@@ -284,6 +284,12 @@ public class FXHelper {
                         myDB.updateCategory(trans);
                     }
                     
+                    // update budget_date if it was changed and it's in the DB
+                    if (myDB.isInDB(trans) == true &&
+                            trans.wasBudgetDateChanged() == true) {
+                        myDB.updateBudgetDate(trans);
+                    }
+
                     // add to database if not already in DB and if category is set
                     if (myDB.isInDB(trans) == false &&
                             trans.getCategoryName().isEmpty() == false) {

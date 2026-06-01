@@ -159,9 +159,13 @@ public class DBHelper {
 
             // insert checked link into table
             stmt = conn.createStatement();
-            String sql = "INSERT INTO trans (date, amount, desc, category) VALUES ('" + 
-                    trans.getDateString() + "', " + trans.getAmount() + ", '" + 
-                    trans.getDesc() + "', '" + trans.getCategoryName() + "');";
+//            String sql = "INSERT INTO trans (date, amount, desc, category) VALUES ('" + 
+//                    trans.getDateString() + "', " + trans.getAmount() + ", '" + 
+//                    trans.getDesc() + "', '" + trans.getCategoryName() + "');";
+            String sql = "INSERT INTO trans (date, amount, desc, category, budget_date) VALUES ('" + 
+                trans.getDateString() + "', " + trans.getAmount() + ", '" + 
+                trans.getDesc() + "', '" + trans.getCategoryName() + "', '" +
+                trans.getBudgetDateString() + "');";
             stmt.executeUpdate(sql);
             conn.commit();
             System.out.printf("Added to DB: %s\n", trans.toString());
@@ -208,7 +212,31 @@ public class DBHelper {
         
         return;
     }
-    
+
+    // Update the budget date if it was changed
+    public void updateBudgetDate(Transaction trans) {
+        long tid = getTransID(trans);
+
+        try {
+            conn = DriverManager.getConnection(dbURL);
+            conn.setAutoCommit(false);
+
+            String query = "UPDATE trans SET budget_date='" + trans.getBudgetDateString() +
+                    "' WHERE id=" + tid;
+            prep = conn.prepareStatement(query);
+            prep.executeUpdate();
+
+            conn.commit();
+            System.out.printf("Updated budget_date in DB: %s -> %s (id = %d)\n",
+                    trans.toString(), trans.getBudgetDateString(), tid);
+            prep.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Catch in updateBudgetDate");
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+    }
+
     public ArrayList<Transaction> getTransByDate(String month, String year) {
 
         ArrayList<Transaction> trans = new ArrayList<>();

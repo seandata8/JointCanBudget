@@ -33,15 +33,16 @@ import org.apache.commons.csv.CSVRecord;
  */
 public class Transaction {
     
-    String desc;            // description
-    Float amount;           // amount of transaction
-    LocalDate date;         // date of transaction
-    LocalDate budgetDate;   // date to be added to the budget
-    String dateString;
+    String desc;             // description
+    Float amount;            // amount of transaction
+    LocalDate date;          // date of transaction
+    String budgetDateString; // date to be added to the budget
+    String dateString;       // date string of the transaction
     Category category = null;
     ComboBox catCB;
     boolean isInDB = false;
     boolean catChanged = false;
+    boolean budgetDateChanged = false;
 
     public Transaction(CSVRecord record) {
         // format the date -- had to change for TD format
@@ -73,7 +74,9 @@ public class Transaction {
             date = LocalDate.parse(record.get(0), formatter);
             DateTimeFormatter sqlFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             dateString = date.format(sqlFormat);
-
+            // default budget date is the transaction date
+            budgetDateString = dateString;
+            
             //date = LocalDate.parse(record.get(0), formatter);
             //DateTimeFormatter sqlFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             //dateString = date.format(sqlFormat);
@@ -144,6 +147,7 @@ public class Transaction {
         // create transaction from database
         isInDB = true;
         dateString = ds;
+        budgetDateString = ds;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         date = LocalDate.parse(ds, formatter);
         amount = amt;
@@ -181,6 +185,18 @@ public class Transaction {
         catChanged = false;
     }
     
+    public boolean wasBudgetDateChanged() {
+        return budgetDateChanged;
+    }
+
+    public void resetBudgetDateChanged() {
+        budgetDateChanged = false;
+    }
+
+    public String getBudgetDateString() {
+        return budgetDateString;
+    }
+
     public String getDesc() {
         return desc;
     }
@@ -235,9 +251,18 @@ public class Transaction {
         dateDP.valueProperty().addListener(new ChangeListener<LocalDate>() {
             @Override
             public void changed(ObservableValue<? extends LocalDate> ov, LocalDate t, LocalDate t1) {
+                DateTimeFormatter sqlFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                budgetDateString = t1.format(sqlFormat);
+                budgetDateChanged = true;
                 dateDP.setStyle("-fx-control-inner-background: mistyrose;");
             }
         });
+//        dateDP.valueProperty().addListener(new ChangeListener<LocalDate>() {
+//            @Override
+//            public void changed(ObservableValue<? extends LocalDate> ov, LocalDate t, LocalDate t1) {
+//                dateDP.setStyle("-fx-control-inner-background: mistyrose;");
+//            }
+//        });
         
         //Button dateB = new Button(String.format("%s", date));
         Button amountB = new Button(String.format("$%8.2f", amount));
