@@ -1,0 +1,26 @@
+# Build output
+target/
+
+# NetBeans
+nbproject/private/
+nb-configuration.xml
+nbactions.xml
+
+# macOS
+.DS_Store
+
+# Sensitive — credentials and tokens
+tokens-*/
+resources/cred2.json
+resources/*.json
+
+# Database files (contain personal financial data)
+resources/*.sqlite
+resources/*.sqlite-journal
+
+# IDE / OS junk
+*.class
+*.log
+
+# Maven diagnostic output
+dependency-tree.txt
