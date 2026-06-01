@@ -317,7 +317,7 @@ public class Transaction {
     public List<Object> getValueList() {
         
         List<Object> ret = new ArrayList<>();
-        ret.add(dateString);
+        ret.add(budgetDateString);
         ret.add(desc);
         ret.add(amount);
         if (category != null) {
