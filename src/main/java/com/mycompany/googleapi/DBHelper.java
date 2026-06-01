@@ -58,6 +58,10 @@ public class DBHelper {
                     ress.getInt("numrecords"));
             
             conn.close();
+                    
+            // add budget_date column if it doesn't exist
+            ensureBudgetDateColumn();
+
         } catch (Exception e){
             
             if (e.getMessage().contains("missing database")) {
@@ -273,5 +277,34 @@ public class DBHelper {
         }
         
         return;        
+    }
+    
+    private void ensureBudgetDateColumn() {
+        try {
+            conn = DriverManager.getConnection(dbURL);
+            stmt = conn.createStatement();
+
+            // check if budget_date column exists
+            ResultSet rs = stmt.executeQuery("PRAGMA table_info(trans)");
+            boolean found = false;
+            while (rs.next()) {
+                if ("budget_date".equals(rs.getString("name"))) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                stmt.executeUpdate("ALTER TABLE trans ADD COLUMN budget_date TEXT");
+                stmt.executeUpdate("UPDATE trans SET budget_date = date WHERE budget_date IS NULL");
+                System.out.println("Added budget_date column and backfilled from date");
+            }
+
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Catch in ensureBudgetDateColumn()");
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
     }
 }
