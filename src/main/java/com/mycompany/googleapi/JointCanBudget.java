@@ -175,13 +175,13 @@ public class JointCanBudget extends Application {
         
         // add each category with keywords
         categories.add(new Category("Restaurants", "hortons", "r"));
-        categories.add(new Category("Groceries","longos,metro,purdys,food basics,lcbo,galleria", "g"));
+        categories.add(new Category("Groceries","loblaws,longos,metro,purdys,food basics,lcbo,galleria", "g"));
         categories.add(new Category("Extra","amazon,amzn,radio-canada", "e"));
-        categories.add(new Category("Fuel & Subway","pres/,shell,ttc", "f"));
+        categories.add(new Category("Fuel & Subway","pres/,presto,shell,ttc", "f"));
         //categories.add(new Category("Condo Insurance","mercury", "c"));
         categories.add(new Category("Cell Phone","koodo", "p"));
         categories.add(new Category("Cleaners","cleaners", "w"));
-        categories.add(new Category("Insurance","square one", "i"));
+        categories.add(new Category("Insurance","square one,certas", "i"));
         categories.add(new Category("IGNORE","msp", "x"));
         
         // remove pending charges from database
