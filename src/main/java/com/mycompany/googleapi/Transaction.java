@@ -329,6 +329,16 @@ public class Transaction {
         return ret;
     }
     
+    public boolean isEqualTo(Transaction comp) {
+        // check if two transactions have the same
+        return this.date.equals(comp.date) && this.amount.equals(comp.amount) && this.desc.equals(comp.desc);
+    }
+    
+    public void markDesc2nd() {
+        // mark the description as the second transaction with the same values
+        desc = desc + " 2nd";
+    }
+    
     @Override
     public String toString() {
         String ret = String.format("%s: %8.2f  %s", date, amount, desc);

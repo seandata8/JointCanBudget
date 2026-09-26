@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
-import java.util.Scanner;
+//import java.util.Scanner;
 import static javafx.application.Platform.exit;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -405,9 +405,24 @@ public class FXHelper {
                      .withIgnoreHeaderCase()
                      .withTrim())) {
                 int count = 0;    
+                ArrayList<Transaction> transArr = new ArrayList<>();
+                // first read in all records and store them in a Transaction array
                 for (CSVRecord record : csvParser) {
                     Transaction trans = new Transaction(record);
-
+                    transArr.add(trans);
+                }
+                // now go through array and add to the current month list
+                // if a trans has all the same values, add " (2nd)" to the description
+                // this is needed for Koodo bills which are duplicates
+//                for (Transaction trans : transArr) {
+                for (int i = 0; i < transArr.size(); i++) {
+                    Transaction trans = transArr.get(i);
+                    // check if it has already been seen
+                    for (int j = 0; j < i; j++) {
+                        if (trans.isEqualTo(transArr.get(j))) {
+                            trans.markDesc2nd();
+                        }
+                    }
                     // Now decide if it should be added to the list
                     // 1. is it in the current month
                     // 2. not already in transactions list
